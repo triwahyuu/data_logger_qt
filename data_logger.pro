@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
+QT += serialport printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,13 +30,17 @@ DEPENDPATH += $$PWD/src
 
 SOURCES += \
         src/main.cpp \
-        src/mainwindow.cpp
+        src/mainwindow.cpp \
+        src/qcustomplot.cpp \
+        src/plotter.cpp
 
 HEADERS += \
-        inc/mainwindow.h
+        inc/mainwindow.h \
+        inc/qcustomplot.h \
+        inc/plotter.h
 
 FORMS += \
-        mainwindow.ui
+        ui/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
