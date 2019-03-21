@@ -6,7 +6,8 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "qmake data_logger.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug -o build/Debug/ && make -j4 --directory build/Debug",
+            "command": "make",
+            //"command": "qmake data_logger.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug -o build/Debug/ && make -j4 --directory build/Debug",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -16,7 +17,8 @@
         {
             "label": "run",
             "type": "shell",
-            "command": "${workspaceFolder}/build/Debug/data_logger",
+            "command": "make run",
+            //"command": "${workspaceFolder}/build/Debug/data_logger",
             "group": {
                 "kind": "test",
                 "isDefault": true
