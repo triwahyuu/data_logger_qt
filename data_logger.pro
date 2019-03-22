@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 CONFIG += c++11
+DEFINES += QT_NO_VERSION_TAGGING
 
 INCLUDEPATH += $$PWD/inc
 DEPENDPATH += $$PWD/src
@@ -32,12 +33,14 @@ SOURCES += \
         src/main.cpp \
         src/mainwindow.cpp \
         src/qcustomplot.cpp \
-        src/plotter.cpp
+        src/plotter.cpp \
+        src/serial_core.cpp
 
 HEADERS += \
         inc/mainwindow.h \
         inc/qcustomplot.h \
-        inc/plotter.h
+        inc/plotter.h \
+        inc/serial_core.h
 
 FORMS += \
         ui/mainwindow.ui
