@@ -36,7 +36,7 @@ void MainWindow::setupPlotter()
 {
     plotLayout = new QVBoxLayout(ui->plotWidget);
     plotLayout->setContentsMargins(0,0,0,0);
-    plot = new RealTimePlot(3);
+    plot = new RealTimePlot(3, interval);
     plotLayout->addWidget(plot);
 
     plot_timer = new QTimer();
