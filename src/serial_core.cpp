@@ -8,6 +8,7 @@ SerialCore::SerialCore(QObject *parent) : QObject(parent)
     m_serial = new QSerialPort();
     connect(m_serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
             this, &SerialCore::handleError);
+    connect(m_serial, &QSerialPort::readyRead, this, &SerialCore::read);
 }
 
 SerialCore::~SerialCore()
@@ -21,9 +22,9 @@ bool SerialCore::open(SerialCore::Settings s)
     m_serial->setDataBits(s.dataBits);
     m_serial->setParity(s.parity);
     m_serial->setStopBits(s.stopBits);
+    m_serial->setFlowControl(QSerialPort::NoFlowControl);
 
     if (m_serial->open(QIODevice::ReadWrite)) {
-        qInfo() << "Connected";
         m_opened = true;
         return true;
         // showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6")
@@ -63,9 +64,10 @@ void SerialCore::write(const QByteArray &data)
     m_serial->write(data);
 }
 
-QByteArray SerialCore::read()
+void SerialCore::read()
 {
-    return m_serial->readAll();
+    QByteArray data = m_serial->readAll();
+    emit dataReadReady(data);
 }
 
 bool SerialCore::isOpened()

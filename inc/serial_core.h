@@ -13,7 +13,7 @@ public:
 
     typedef struct SerialSettings {
         QString portName;
-        QSerialPort::BaudRate baudRate;
+        qint32 baudRate;
         QString stringBaudRate;
         QSerialPort::DataBits dataBits;
         QString stringDataBits;
@@ -39,11 +39,13 @@ public:
     bool isOpened();
 
     void write(const QByteArray &data);
-    QByteArray read();
+    void read();
 
     void saveSetting(Settings s);
     
-
+signals:
+    void dataReadReady(const QByteArray &data);
+    
 private:
     QSerialPort *m_serial;
     Settings m_setting;

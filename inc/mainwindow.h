@@ -22,6 +22,8 @@ private slots:
     void updatePlot();
     void actionBtnCallback();
     void connectBtnCallback();
+    void putData(const QByteArray &data);
+    void sendData();
 
 private:
     void setupPlotter();
@@ -44,8 +46,12 @@ private:
     std::uniform_int_distribution<> rand_uniform;
 
     bool _plot_paused = true;
+    bool m_connected = false;
     SerialCore *m_serial;
     SerialCore::Settings m_serialSetting;
+
+protected:
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 };
 
 #endif // MAINWINDOW_H

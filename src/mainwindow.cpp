@@ -11,13 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    m_serial = new SerialCore();
 
     setupUI();
     setupPlotter();
     fillPortParam();
     listPortInfo();
-
-    m_serial = new SerialCore();
 
     gen = std::mt19937(rd());
     rand_uniform = std::uniform_int_distribution<>(-1000, 1000);
@@ -46,16 +45,29 @@ void MainWindow::setupUI()
     ui->hSplitter->setSizes(QList<int>({210, 0})); // set config box horizontal size, the rest for plotter
 
     // just a test
-    ui->receiveText->setPlainText("10, 10\n10\n");
-    ui->receiveText->moveCursor(QTextCursor::End);
-    ui->receiveText->insertPlainText("a\na\na\na\n\n\na\na\na\n\na\na\na");
+    // ui->receiveText->insertPlainText("10, 10\n10\n");
+    // // ui->receiveText->moveCursor(QTextCursor::End);
+    // ui->receiveText->insertPlainText("a\na\na\na\n\n\na\na\na\n\na\na\na");
 
     connect(ui->actionBtn, SIGNAL(clicked()), this, SLOT(actionBtnCallback()));
+    connect(ui->connectBtn, &QPushButton::clicked, this, &MainWindow::connectBtnCallback);
+
+    connect(m_serial, &SerialCore::dataReadReady, [this](const QByteArray &data){
+        ui->receiveText->insertPlainText(data);
+        ui->receiveText->verticalScrollBar()->setValue(ui->receiveText->verticalScrollBar()->maximum());
+    });
+
+    connect(ui->sendBtn, &QPushButton::clicked, this, &MainWindow::sendData);
+    // connect(ui->sendBtn, &QPushButton::clicked, [this](){
+    //     ui->receiveText->insertPlainText(QString(ui->sendText->text() + "\r\n"));
+    //     ui->sendText->clear();
+    // });
+
     connect(ui->deviceCombo, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [this](int idx){
         m_serialSetting.portName = ui->deviceCombo->itemData(idx).toString();
     });
     connect(ui->baudComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [this](int idx){
-        m_serialSetting.baudRate = static_cast<QSerialPort::BaudRate>(ui->baudComboBox->itemData(idx).toInt());
+        m_serialSetting.baudRate = static_cast<qint32>(ui->baudComboBox->itemData(idx).toInt());
     });
     connect(ui->parityComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [this](int idx){
         m_serialSetting.parity = static_cast<QSerialPort::Parity>(ui->parityComboBox->itemData(idx).toInt());
@@ -73,6 +85,9 @@ void MainWindow::listPortInfo()
     const auto infos = QSerialPortInfo::availablePorts();
     for(const QSerialPortInfo &info : infos){
         ui->deviceCombo->addItem(info.portName());
+    }
+    if(infos.size() != 0){
+        m_serialSetting.portName = infos[0].portName();
     }
 }
 
@@ -104,10 +119,6 @@ void MainWindow::fillPortParam()
     m_serialSetting.dataBits = QSerialPort::Data8;
     m_serialSetting.parity = QSerialPort::NoParity;
     m_serialSetting.stopBits = QSerialPort::OneStop;
-
-    // ui->flowControlBox->addItem(tr("None"), QSerialPort::NoFlowControl);
-    // ui->flowControlBox->addItem(tr("RTS/CTS"), QSerialPort::HardwareControl);
-    // ui->flowControlBox->addItem(tr("XON/XOFF"), QSerialPort::SoftwareControl);
 }
 
 void MainWindow::actionBtnCallback()
@@ -127,11 +138,32 @@ void MainWindow::connectBtnCallback()
     if(m_serial->isOpened()){
         m_serial->close();
         ui->connectBtn->setText("Connect");
+        m_connected = false;
     }
     else{
-        m_serial->open();
-        ui->connectBtn->setText("Disconnect");
+        m_serial->saveSetting(m_serialSetting);
+        if(m_serial->open()){
+            ui->connectBtn->setText("Disconnect");
+            m_connected = true;
+        }
     }
+    ui->sendBox->setEnabled(m_connected);
+    ui->receiveBox->setEnabled(m_connected);
+    ui->statusbar->showMessage(m_connected ? 
+        QString("Connected %1 %2").arg(m_serialSetting.portName).arg(QString::number(m_serialSetting.baudRate))
+        : "");
+}
+
+void MainWindow::putData(const QByteArray &data)
+{
+    ui->receiveText->insertPlainText(data);
+}
+
+void MainWindow::sendData()
+{
+    m_serial->write(ui->sendText->text().toLocal8Bit());
+    ui->receiveText->insertPlainText(QString(ui->sendText->text() + "\r\n"));
+    ui->sendText->clear();
 }
 
 void MainWindow::updatePlot()
@@ -144,4 +176,13 @@ void MainWindow::updatePlot()
     y3 += rand_uniform(gen)/10000.0;
     
     plot->updateData(QVector<double>({y1, y2, y3}));
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+    if(ui->sendText->hasFocus()){
+        if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return){
+            sendData();
+        }
+    }
 }
