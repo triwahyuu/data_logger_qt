@@ -1,6 +1,6 @@
 all: debug build
 
-run:
+run: all
 	./build/Debug/data_logger
 
 debug: data_logger.pro src/*.cpp inc/*.h ui/*.ui
