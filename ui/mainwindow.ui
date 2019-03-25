@@ -57,7 +57,7 @@
        <property name="maximumSize">
         <size>
          <width>340</width>
-         <height>778</height>
+         <height>782</height>
         </size>
        </property>
        <property name="orientation">
@@ -156,38 +156,8 @@ QGroupBox::title {
                <enum>Qt::RightToLeft</enum>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>-1</number>
               </property>
-              <item>
-               <property name="text">
-                <string>4800</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>9600</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>19200</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>38400</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>57600</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>115200</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="2" column="0">
@@ -214,21 +184,6 @@ QGroupBox::title {
               <property name="layoutDirection">
                <enum>Qt::RightToLeft</enum>
               </property>
-              <item>
-               <property name="text">
-                <string>None</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Even</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Odd</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="3" column="0">
@@ -256,28 +211,8 @@ QGroupBox::title {
                <enum>Qt::RightToLeft</enum>
               </property>
               <property name="currentIndex">
-               <number>3</number>
+               <number>-1</number>
               </property>
-              <item>
-               <property name="text">
-                <string>5</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>6</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>7</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>8</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="4" column="0">
@@ -305,18 +240,8 @@ QGroupBox::title {
                <enum>Qt::RightToLeft</enum>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>-1</number>
               </property>
-              <item>
-               <property name="text">
-                <string>1</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>2</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item row="0" column="0">
@@ -536,7 +461,7 @@ QGroupBox::title {
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

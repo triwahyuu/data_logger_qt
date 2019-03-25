@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include "plotter.h"
+#include "serial_core.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,9 +21,13 @@ public:
 private slots:
     void updatePlot();
     void actionBtnCallback();
+    void connectBtnCallback();
 
 private:
     void setupPlotter();
+    void setupUI();
+    void listPortInfo();
+    void fillPortParam();
 
     Ui::MainWindow *ui;
 
@@ -39,6 +44,8 @@ private:
     std::uniform_int_distribution<> rand_uniform;
 
     bool _plot_paused = true;
+    SerialCore *m_serial;
+    SerialCore::Settings m_serialSetting;
 };
 
 #endif // MAINWINDOW_H

@@ -11,9 +11,9 @@ public:
     explicit SerialCore(QObject *parent = nullptr);
     ~SerialCore();
 
-    struct Settings {
+    typedef struct SerialSettings {
         QString portName;
-        uint32_t baudRate;
+        QSerialPort::BaudRate baudRate;
         QString stringBaudRate;
         QSerialPort::DataBits dataBits;
         QString stringDataBits;
@@ -24,14 +24,25 @@ public:
         QSerialPort::FlowControl flowControl;
         QString stringFlowControl;
         bool localEchoEnabled;
-    };
+    } Settings;
 
-    bool openSerialPort(Settings s);
-    bool openSerialPort();
-    void closeSerialPort();
+    typedef struct SerialPortInfo{
+        QString description;
+        QString manufacturer;
+        QString serialNumber;
+    } PortInfo;
+
+    bool open(Settings s);
+    bool open();
+    void close();
     void handleError(QSerialPort::SerialPortError error);
+    bool isOpened();
+
+    void write(const QByteArray &data);
+    QByteArray read();
 
     void saveSetting(Settings s);
+    
 
 private:
     QSerialPort *m_serial;
