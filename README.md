@@ -1,5 +1,5 @@
 # Data Logger
-Data Logger developed with Qt5 (C++)
+Data Logger developed with Qt5 (C++). This is still an unfinished project, don't when will be continued again.
 
 ## Dependencies
 This project depends on: `QtSerialPort`.
